@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class Example {
 
     private final GreetingService greetingService;
+    private final TimeService timeService;
 
     @Autowired
-    public Example(GreetingService greetingService) {
+    public Example(GreetingService greetingService, TimeService timeService) {
         this.greetingService = greetingService;
+        this.timeService = timeService;
     }
 
     public static void main(String[] args) {
@@ -28,8 +30,8 @@ public class Example {
     }
 
     @GetMapping("/greeting")
-    public String greeting(
+    public String index(
             @RequestParam(value = "name", defaultValue = "") String name) {
-        return greetingService.greet(name);
+        return greetingService.greet(name) + timeService.getTime();
     }
 }
