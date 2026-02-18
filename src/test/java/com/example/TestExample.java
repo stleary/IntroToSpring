@@ -12,7 +12,7 @@ public class TestExample {
     
     @Before
     public void setup() {
-        greetingService = new SimpleGreetingService();
+        greetingService = new FormalGreetingService();
         timeService = new TimeService();
         example = new Example(greetingService, timeService);
     }
@@ -30,25 +30,25 @@ public class TestExample {
     @Test
     public void testGreetWithName() {
         String result = example.index("Alice");
-        assertEquals("Simple Hello, Alice! 2026-01-01", result);
+        assertEquals("Formal Hello, Alice! 2026-01-01", result);
     }
 
     @Test
     public void testGreetingEndpointWithName() {
         String result = example.index("Bob");
-        assertEquals("Simple Hello, Bob! 2026-01-01", result);
+        assertEquals("Formal Hello, Bob! 2026-01-01", result);
     }
 
     @Test
     public void testGreetWithEmptyName() {
         String result = example.index("");
-        assertEquals("Simple Hello, World! 2026-01-01", result);
+        assertEquals("Formal Hello, World! 2026-01-01", result);
     }
 
     @Test
     public void testGreetWithNull() {
         String result = example.index(null);
-        assertEquals("Simple Hello, World! 2026-01-01", result);
+        assertEquals("Formal Hello, World! 2026-01-01", result);
     }
 }
 
