@@ -38,12 +38,9 @@ public class TestExample {
     }
 
     // Simple fake for testing
-    static class FakeGreetingRepository extends JdbcGreetingRepository {
+    static class FakeGreetingRepository implements GreetingRepository {
         private String storedName;
         private String storedMessage;
-        public FakeGreetingRepository() {
-            super(null); // No real JdbcTemplate needed
-        }
 
         public void setStoredGreeting(String name, String message) {
             this.storedName = name;
