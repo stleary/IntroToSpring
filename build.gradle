@@ -15,6 +15,8 @@ repositories {
 dependencies {
    testImplementation 'junit:junit:4.13.2'
    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.18'
+   implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.18'
+   implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
 }
 springBoot {
    mainClass = 'com.example.Example'

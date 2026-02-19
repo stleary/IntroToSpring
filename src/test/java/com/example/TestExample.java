@@ -1,55 +1,65 @@
 package com.example;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import org.junit.Before;
+import java.util.Optional;
 
 public class TestExample {
     private GreetingService greetingService;
-    private TimeService timeService;
-    private Example example;
-    
+    private FakeGreetingRepository fakeRepository;
+
     @Before
-    public void setup() {
-        greetingService = new FormalGreetingService();
-        timeService = new TimeService();
-        example = new Example(greetingService, timeService);
-    }
-
-    // --- Existing controller tests (updated) ---
-
-    @Test
-    public void testIndexReturnsGreeting() {
-        String result = example.index();
-        assertEquals("Greetings from Spring Boot!", result);
-    }
-
-    // --- GreetingService unit tests ---
-
-    @Test
-    public void testGreetWithName() {
-        String result = example.index("Alice");
-        assertEquals("Formal Hello, Alice! 2026-01-01", result);
+    public void setUp() {
+        fakeRepository = new FakeGreetingRepository();
+        greetingService = new FormalGreetingService(fakeRepository);
     }
 
     @Test
-    public void testGreetingEndpointWithName() {
-        String result = example.index("Bob");
-        assertEquals("Formal Hello, Bob! 2026-01-01", result);
+    public void testGreetDBWithStoredMessage() {
+        fakeRepository.setStoredGreeting("Alice",
+            "Welcome back, Alice!");
+        String result = greetingService.greet("Alice");
+        assertEquals("Welcome back, Alice!", result);
     }
 
     @Test
-    public void testGreetWithEmptyName() {
-        String result = example.index("");
-        assertEquals("Formal Hello, World! 2026-01-01", result);
+    public void testGreetDBWithNoStoredMessage() {
+        String result = greetingService.greet("Charlie");
+        assertEquals("Hello, Charlie!", result);
     }
 
     @Test
-    public void testGreetWithNull() {
-        String result = example.index(null);
-        assertEquals("Formal Hello, World! 2026-01-01", result);
+    public void testGreetDBWithEmptyName() {
+        fakeRepository.setStoredGreeting("World",
+            "Hello, World!");
+        String result = greetingService.greet("");
+        assertEquals("Hello, World!", result);
+    }
+
+    // Simple fake for testing
+    static class FakeGreetingRepository extends GreetingRepository {
+        private String storedName;
+        private String storedMessage;
+        public FakeGreetingRepository() {
+            super(null); // No real JdbcTemplate needed
+        }
+
+        public void setStoredGreeting(String name, String message) {
+            this.storedName = name;
+            this.storedMessage = message;
+        }
+
+        @Override
+        public Optional<GreetingModel> findByName(String name) {
+            if (name.equals(storedName)) {
+                GreetingModel greetingModel = new GreetingModel();
+                greetingModel.setName(storedName);
+                greetingModel.setMessage(storedMessage);
+                return Optional.of(greetingModel);
+            }
+            return Optional.empty();
+        }
     }
 }
-
 
