@@ -38,7 +38,7 @@ public class TestExample {
     }
 
     // Simple fake for testing
-    static class FakeGreetingRepository extends GreetingRepository {
+    static class FakeGreetingRepository extends JdbcGreetingRepository {
         private String storedName;
         private String storedMessage;
         public FakeGreetingRepository() {
