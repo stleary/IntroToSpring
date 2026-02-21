@@ -3,6 +3,9 @@ package com.example;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TestExample {
@@ -15,48 +18,122 @@ public class TestExample {
         greetingService = new FormalGreetingService(fakeRepository);
     }
 
-    @Test
-    public void testGreetDBWithStoredMessage() {
-        fakeRepository.setStoredGreeting("Alice",
-            "Welcome back, Alice!");
-        String result = greetingService.greet("Alice");
-        assertEquals("Welcome back, Alice!", result);
-    }
+    // --- Service Tests: findAll() ---
 
     @Test
-    public void testGreetDBWithNoStoredMessage() {
-        String result = greetingService.greet("Charlie");
-        assertEquals("Hello, Charlie!", result);
+    public void testFindAllReturnsAllGreetings() {
+        fakeRepository.addGreeting(1L, "Alice", "Hello Alice");
+        fakeRepository.addGreeting(2L, "Bob", "Hello Bob");
+        List<GreetingModel> results = greetingService.findAll();
+        assertEquals(2, results.size());
     }
+
+    // --- Service Tests: findByName() ---
 
     @Test
-    public void testGreetDBWithEmptyName() {
-        fakeRepository.setStoredGreeting("World",
-            "Hello, World!");
-        String result = greetingService.greet("");
-        assertEquals("Hello, World!", result);
+    public void testFindByIdReturnsGreeting() {
+        fakeRepository.addGreeting(1L, "Alice", "Hello Alice");
+        GreetingModel result = greetingService.findByName("Alice");
+        assertEquals("Alice", result.getName());
     }
 
-    // Simple fake for testing
+
+    // --- Service Tests: create() ---
+
+    @Test
+
+    public void testCreateAssignsId() {
+        GreetingModel greetingModel = new GreetingModel();
+        greetingModel.setName("Charlie");
+        greetingModel.setMessage("Hello Charlie");
+        GreetingModel saved = greetingService.create(greetingModel);
+        assertNotNull(saved.getId());
+        assertEquals("Charlie", saved.getName());
+    }
+
+    // --- Service Tests: update() ---
+
+    @Test
+    public void testUpdateModifiesGreeting() {
+        fakeRepository.addGreeting(1L, "Alice", "Hello Alice");
+        GreetingModel updated = new GreetingModel();
+        updated.setName("Alice");
+        updated.setMessage("Updated message");
+        GreetingModel result = greetingService.update(updated);
+        assertEquals("Updated message", result.getMessage());
+    }
+
+    // --- Service Tests: delete() ---
+
+    @Test
+    public void testDeleteRemovesGreeting() {
+        fakeRepository.addGreeting(1L, "Alice", "Hello Alice");
+        greetingService.delete("Alice");
+        assertEquals(0, fakeRepository.findAll().size());
+    }
+
+
+    // --- Fake Repository Implementation ---
+
+    /**
+     * In-memory implementation of GreetingRepository for testing.
+     * Implements the interface directly, avoiding any database dependencies.
+     */
+
     static class FakeGreetingRepository implements GreetingRepository {
-        private String storedName;
-        private String storedMessage;
+        private final List<GreetingModel> greetings = new ArrayList<>();
+        private Long nextId = 1L;
 
-        public void setStoredGreeting(String name, String message) {
-            this.storedName = name;
-            this.storedMessage = message;
+        public void addGreeting(Long id, String name, String message) {
+            GreetingModel g = new GreetingModel();
+            g.setId(id);
+            g.setName(name);
+            g.setMessage(message);
+            greetings.add(g);
+            if (id >= nextId) {
+                nextId = id + 1;
+            }
         }
 
         @Override
-        public Optional<GreetingModel> findByName(String name) {
-            if (name.equals(storedName)) {
-                GreetingModel greetingModel = new GreetingModel();
-                greetingModel.setName(storedName);
-                greetingModel.setMessage(storedMessage);
-                return Optional.of(greetingModel);
+        public List<GreetingModel> findAll() {
+            return new ArrayList<>(greetings);
+        }
+
+        @Override
+        public GreetingModel findByName(String name) {
+            return greetings.stream()
+                    .filter(g -> g.getName().equals(name))
+                    .findFirst().get();
+        }
+
+        @Override
+        public GreetingModel save(GreetingModel greetingModel) {
+            greetingModel.setId(nextId++);
+            greetings.add(greetingModel);
+            return greetingModel;
+        }
+
+        @Override
+        public int update(GreetingModel greetingModel) {
+            for (int i = 0; i < greetings.size(); i++) {
+                if (greetings.get(i).getId().equals(greetingModel.getId())) {
+                    greetings.set(i, greetingModel);
+                    return 1;
+                }
             }
-            return Optional.empty();
+            return 0;
+        }
+
+        @Override
+        public int delete(String name) {
+            for (int i = 0; i < greetings.size(); i++) {
+                if (greetings.get(i).getName().equals(name)) {
+                    greetings.remove(i);
+                    return 1;
+                }
+            }
+            return 0;
         }
     }
 }
-

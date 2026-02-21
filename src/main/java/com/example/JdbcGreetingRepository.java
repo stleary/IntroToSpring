@@ -3,15 +3,18 @@ package com.example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcGreetingRepository  implements GreetingRepository {
+public class JdbcGreetingRepository implements GreetingRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -23,7 +26,8 @@ public class JdbcGreetingRepository  implements GreetingRepository {
     /**
      * RowMapper is an anonymous inner class that converts a db row to a Java class
      */
-    private final RowMapper<GreetingModel> rowMapper = new RowMapper<GreetingModel>() {
+    private RowMapper<GreetingModel> rowMapper = new RowMapper<GreetingModel>() {
+
         @Override
         public GreetingModel mapRow(ResultSet rs, int rowNum) throws SQLException {
             GreetingModel greetingModel = new GreetingModel();
@@ -37,33 +41,85 @@ public class JdbcGreetingRepository  implements GreetingRepository {
     };
 
     /**
-     * But sometimes you will see this Java lambda instead.
-     * An anonymous function that takes two params, a resultSet and a row from the db,
-     * and returns a GreetingModel instance
-     */
-//    private final RowMapper<GreetingModel> rowMapper = (rs, rowNum) -> {
-//        GreetingModel greetingModel = new GreetingModel();
-//        greetingModel.setId(rs.getLong("id"));
-//        greetingModel.setName(rs.getString("name"));
-//        greetingModel.setMessage(rs.getString("message"));
-//        greetingModel.setCreatedAt(rs.getTimestamp("created_at")
-//                .toLocalDateTime());
-//        return greetingModel;
-//    };
-
-
-    /**
-     * lookup in db by name
-     * @param name the name to look up
-     * @return Optional object, which may or may not contain a GreetingModel
-     * Use isPresent() for presence, and get() if presence is true
+     * Retrieve all greetings from the database.
+     * @return List of all GreetingModel objects
      */
     @Override
-    public Optional<GreetingModel> findByName(String name) {
+    public List<GreetingModel> findAll() {
+        return jdbcTemplate.query("SELECT * FROM greetings ORDER BY id", rowMapper);
+    }
+
+    /**
+     * Find a greeting by name.
+     * @param name the name to look up
+     * @return the greeting if found, null otherwise
+     */
+    @Override
+    public GreetingModel findByName(String name) {
+        GreetingModel greetingModel = null;
         List<GreetingModel> results = jdbcTemplate.query(
                 "SELECT * FROM greetings WHERE name = ?",
                 rowMapper, name);
-        return results.isEmpty() ?
-                Optional.empty() : Optional.of(results.get(0));
+        if (results.size() == 1) {
+            greetingModel = results.get(0);
+        }
+        return greetingModel;
+    }
+
+    /**
+     * Insert a new greeting into the database.
+     * An exception will be thrown on error
+     * @param greetingModel the greeting to save
+     */
+    @Override
+    public GreetingModel save(GreetingModel greetingModel) {
+        jdbcTemplate.update( 
+            "INSERT INTO greetings (name, message) VALUES (?, ?)",
+            greetingModel.getName(),    
+            greetingModel.getMessage() ); 
+
+        // This is more common in the field: 
+        // Instead of passing a query string, use a lambda that creates a 
+        // PreparedStatement and populates a keyHolder that contains the 
+        // newly crested ID
+        // KeyHolder keyHolder = new GeneratedKeyHolder();
+        // jdbcTemplate.update(connection -> {
+        //     PreparedStatement ps = connection.prepareStatement(
+        //             "INSERT INTO greetings (name, message) VALUES (?, ?)",
+        //             Statement.RETURN_GENERATED_KEYS);
+        //     ps.setString(1, greetingModel.getName());
+        //     ps.setString(2, greetingModel.getMessage());
+        //     return ps;
+        // }, keyHolder);
+        // SQLite returns the key directly; other databases may differ
+        // Long generatedId = keyHolder.getKey().longValue();
+        return findByName(greetingModel.getName());
+    }
+
+    /**
+     * Update an existing greeting.
+     * @param greetingModel the greeting with updated values (must have a valid id)
+     * @return number of rows affected (1 if successful, 0 if id not found)
+     */
+    @Override
+    public int update(GreetingModel greetingModel) {
+        return jdbcTemplate.update(
+                "UPDATE greetings SET name = ?, message = ? WHERE id = ?",
+                greetingModel.getName(),
+                greetingModel.getMessage(),
+                greetingModel.getId());
+    }
+
+    /**
+     * Delete a greeting by name.
+     * @param name the greeting name to delete
+     * @return number of rows affected (1 if successful, 0 if id not found)
+     */
+    @Override
+    public int delete(String name) {
+        return jdbcTemplate.update("DELETE FROM greetings WHERE name = ?", name);
     }
 }
+
+
+

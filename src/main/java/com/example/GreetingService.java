@@ -1,10 +1,12 @@
 package com.example;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
 public interface GreetingService {
-    public String greet(String name);
+    List<GreetingModel> findAll();
+    GreetingModel findByName(String name);
+    GreetingModel create(GreetingModel greetingModel);
+    GreetingModel update(GreetingModel greetingModel);
+    int delete(String name);
 }
-
 
