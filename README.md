@@ -7,4 +7,4 @@ Practical lessons on the basics of using the Java Spring framework
 
 4. [JDBC Database Connection](https://docs.google.com/document/d/1R5WxIiSxw6iutMrtJTLEDvebgaP2uZb85oagrlB3iLs/edit?usp=sharing)
 
-5. 
+5. [Complete REST Application](https://docs.google.com/document/d/1o8xYkLl6jodXfQmaYy0iWHJXF5ZlPihq7o-zbruMn0A/edit?usp=sharing)
