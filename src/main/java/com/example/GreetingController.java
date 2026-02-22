@@ -1,6 +1,7 @@
 package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
@@ -40,12 +41,19 @@ public class GreetingController {
      * Returns 201 Created with Location header pointing to the new resource.
      */
     @PostMapping("/greeting")
-    public ResponseEntity<GreetingModel> createGreeting(@RequestBody GreetingModel greetingModel) {
-        GreetingModel saved = greetingService.create(greetingModel);
-        URI location = URI.create("/greetings/name=" + saved.getName());
-        return ResponseEntity
-                .created(location)
-                .body(saved);
+    public ResponseEntity<?> createGreeting(@RequestBody GreetingModel greetingModel) {
+    	try {
+	        GreetingModel saved = greetingService.create(greetingModel);
+	        URI location = URI.create("/greetings/name=" + saved.getName());
+	        return ResponseEntity
+	                .created(location)
+	                .body(saved);
+    	} catch (GreetingException exception) {
+    		return ResponseEntity
+    				.status(HttpStatus.BAD_REQUEST)
+    				.body(new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    				
+    	}
     }
 
     /**
@@ -54,8 +62,18 @@ public class GreetingController {
      * Request body should be JSON: {"name": "Alice", "message": "Updated message!"}
      */
     @PutMapping("/greeting")
-    public GreetingModel updateGreeting(@RequestBody GreetingModel greetingModel) {
-        return greetingService.update(greetingModel);
+    public ResponseEntity<?> updateGreeting(@RequestBody GreetingModel greetingModel) {
+    	try {
+    		GreetingModel findGreetingModel = greetingService.update(greetingModel);
+    		return ResponseEntity
+    				.status(HttpStatus.OK)
+    				.body(findGreetingModel);
+    	} catch (GreetingException exception) {
+    		return ResponseEntity
+    				.status(HttpStatus.BAD_REQUEST)
+    				.body(new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    				
+    	}
     }
 
     /**

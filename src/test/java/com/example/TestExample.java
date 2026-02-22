@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class TestExample {
     private GreetingService greetingService;
@@ -73,6 +72,25 @@ public class TestExample {
     }
 
 
+    // - Test exceptions
+
+    @Test(expected = GreetingException.class)
+    public void testExceptionOnCreateForDuplicateName() {
+        GreetingModel greetingModel = new GreetingModel();
+        greetingModel.setName("Alice");
+        greetingModel.setMessage("No message");
+        greetingService.create(greetingModel);  // this will be the pre-existing record
+        greetingService.create(greetingModel);  // this will trigger the exception
+    }
+
+    @Test(expected = GreetingException.class)
+    public void testExceptionOnUpdateForNameNotFound() {
+        GreetingModel greetingModel = new GreetingModel();
+        greetingModel.setName("Nobody");
+        greetingModel.setMessage("No message");
+        greetingService.update(greetingModel);
+    }
+
     // --- Fake Repository Implementation ---
 
     /**
@@ -102,9 +120,13 @@ public class TestExample {
 
         @Override
         public GreetingModel findByName(String name) {
-            return greetings.stream()
-                    .filter(g -> g.getName().equals(name))
-                    .findFirst().get();
+            if (!greetings.isEmpty()) {
+                return greetings.stream()
+                        .filter(g -> g.getName().equals(name))
+                        .findFirst().get();
+            } else {
+                return null;
+            }
         }
 
         @Override
