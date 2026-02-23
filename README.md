@@ -9,4 +9,21 @@ Practical lessons on the basics of using the Java Spring framework
 
 4. [Complete REST Application](https://docs.google.com/document/d/1o8xYkLl6jodXfQmaYy0iWHJXF5ZlPihq7o-zbruMn0A/edit?usp=sharing)
 
-5. 
+
+**Next up (not in order):**
+* @Transactional
+* @SpringBootTest, @AutoConfigureMockMvc integration testing
+* Input validation
+* OAuth2 and JWT for authentication
+* Deploy a Spring microservice
+* Mockito
+
+**Adjacent tools:**
+* GitHub - Done
+* Gradle - Done
+* Postman - Pending
+* AWS
+* Python automated tests
+
+
+
