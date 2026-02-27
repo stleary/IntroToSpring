@@ -1,8 +1,12 @@
+.idea
+
 .classpath
 .gitattributes
 .project
 .settings/
 bin
+
+src/main/resources/keystore.p12
 
 
 # Compiled class file

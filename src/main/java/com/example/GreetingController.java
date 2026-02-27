@@ -4,8 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.net.URI;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 public class GreetingController {
@@ -14,6 +22,28 @@ public class GreetingController {
     @Autowired
     public GreetingController(GreetingService greetingService) {
         this.greetingService = greetingService;
+    }
+
+    /**
+     * Handles validation errors from @Valid.
+     * Returns a 400 response with details about which fields failed.
+     *
+     * Note: @Valid throws MethodArgumentNotValidException BEFORE the method
+     * body executes, so a local try/catch cannot catch it. This handler
+     * method catches it at the controller level instead.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", 400);
+        body.put("error", "Validation Failed");
+        body.put("messages", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     /**
@@ -41,7 +71,7 @@ public class GreetingController {
      * Returns 201 Created with Location header pointing to the new resource.
      */
     @PostMapping("/greeting")
-    public ResponseEntity<?> createGreeting(@RequestBody GreetingModel greetingModel) {
+    public ResponseEntity<?> createGreeting(@Valid @RequestBody GreetingModel greetingModel) {
     	try {
 	        GreetingModel saved = greetingService.create(greetingModel);
 	        URI location = URI.create("/greetings/name=" + saved.getName());
@@ -62,7 +92,7 @@ public class GreetingController {
      * Request body should be JSON: {"name": "Alice", "message": "Updated message!"}
      */
     @PutMapping("/greeting")
-    public ResponseEntity<?> updateGreeting(@RequestBody GreetingModel greetingModel) {
+    public ResponseEntity<?> updateGreeting(@Valid @RequestBody GreetingModel greetingModel) {
     	try {
     		GreetingModel findGreetingModel = greetingService.update(greetingModel);
     		return ResponseEntity
