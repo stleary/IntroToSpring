@@ -22,7 +22,6 @@ Tools and technologies:
 * Hibernate
 * Gradle 
 * JSON
-* Postman 
-* Curl
+* Postman
 * HTTPS, self-signed certificates
 * AWS (Cognito)
