@@ -13,15 +13,17 @@ Next up:
 * Deploy to the AWS cloud
     * Convert to AWS Lambda
     * Adding Spring to a microservice
-* Advanced Spring topics
-    * @Transactional
-    * @SpringBootTest, @AutoConfigureMockMvc integration testing
 
-Tools and technologies:
-* Spring
-* Hibernate
-* Gradle 
-* JSON
-* Postman
-* HTTPS, self-signed certificates
-* AWS (Cognito)
+
+Tools and technologies touched on by these lessons:
+* Spring framework with modules: boot, web, JDBC, security
+* REST API
+* Database
+* POJO (Java beans: Plain Old Java Objects)
+* Gradle (configure project)
+* JSON (data transfer)
+* Postman (testing)
+* application.properties
+* Hibernate (validation)
+* HTTPS, self-signed certificates (security)
+* AWS (Cognito oauth2 authentication)
