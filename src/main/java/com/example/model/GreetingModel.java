@@ -1,18 +1,12 @@
-package com.example;
+package com.example.model;
 
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 public class GreetingModel {
     private Long id;
 
-    @NotBlank(message = "Name is required")
-    @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
     private String name;
 
-    @NotBlank(message = "Message is required")
-    @Size(min = 1, max = 500, message = "Message must be between 1 and 500 characters")
     private String message;
 
     private LocalDateTime createdAt;

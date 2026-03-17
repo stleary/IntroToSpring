@@ -1,4 +1,6 @@
-package com.example;
+package com.example.repository;
+
+import com.example.model.GreetingModel;
 
 import java.util.List;
 

@@ -1,5 +1,8 @@
-package com.example;
+package com.example.service;
 
+import com.example.GreetingException;
+import com.example.model.GreetingModel;
+import com.example.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;

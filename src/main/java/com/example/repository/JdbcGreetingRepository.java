@@ -1,5 +1,6 @@
-package com.example;
+package com.example.repository;
 
+import com.example.model.GreetingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

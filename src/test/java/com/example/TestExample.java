@@ -1,5 +1,9 @@
 package com.example;
 
+import com.example.model.GreetingModel;
+import com.example.repository.GreetingRepository;
+import com.example.service.FormalGreetingService;
+import com.example.service.GreetingService;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
