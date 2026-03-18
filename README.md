@@ -9,29 +9,20 @@ Practical lessons on the basics of using the Java Spring framework
 
 4. [Complete REST Application](https://docs.google.com/document/d/1o8xYkLl6jodXfQmaYy0iWHJXF5ZlPihq7o-zbruMn0A/edit?usp=sharing)
 
-
-**Next up:**
-* Getting production-ready
-* * Input validation
-* * OAuth2 and JWT for authentication
-
-* Deploy to the AWS cloud
-* * Convert to AWS Lambda 
-* * Adding Spring to a microservice
-
-* Advanced Spring topics
-* * @Transactional
-* * @SpringBootTest, @AutoConfigureMockMvc integration testing
-
+5. [Production Ready](https://docs.google.com/document/d/1hJkTjfYrb2K0Dx_4hcGnucKDrC_RAHsiIVA7LLIBM9M/edit?usp=sharing)
+   
+6. [Lift and Shift to Cloud](https://docs.google.com/document/d/1ktgf6lx-Mk0vjJ93Z10nJFQjOOtzq37EWEIAbhjmESw/edit?usp=sharing)
+  
+7. [Cloud-Native Spring App](https://docs.google.com/document/d/1pZkurPO5e92JNzRAvuxIKyT_Ml3aZqTCUway3tByC_w/edit?usp=sharing))
 
 
 **Adjacent tools:**
-* GitHub - Done
-* Gradle - Done
-* Postman - Pending
+* GitHub
+* Gradle
+* Postman
+* Sqlite
+* MySQL
 * AWS
-* Mockito
-* Python automated tests
 
 
 
