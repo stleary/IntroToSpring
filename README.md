@@ -18,13 +18,6 @@ Practical lessons on the basics of using the Java Spring framework
 7. [Cloud-Native Spring App](https://docs.google.com/document/d/1pZkurPO5e92JNzRAvuxIKyT_Ml3aZqTCUway3tByC_w/edit?usp=sharing))
 
 
-**Adjacent tools:**
-* GitHub
-* Gradle
-* Postman
-* Sqlite
-* MySQL
-* AWS
 
 
 
