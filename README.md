@@ -15,7 +15,7 @@ Practical lessons on the basics of using the Java Spring framework
    
 6. [Lift and Shift to Cloud](https://docs.google.com/document/d/1ktgf6lx-Mk0vjJ93Z10nJFQjOOtzq37EWEIAbhjmESw/edit?usp=sharing)
   
-7. [Cloud-Native Spring App](https://docs.google.com/document/d/1pZkurPO5e92JNzRAvuxIKyT_Ml3aZqTCUway3tByC_w/edit?usp=sharing))
+7. [Cloud-Native Spring App](https://docs.google.com/document/d/1pZkurPO5e92JNzRAvuxIKyT_Ml3aZqTCUway3tByC_w/edit?usp=sharing)
 
 
 
