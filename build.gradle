@@ -14,6 +14,11 @@ repositories {
 }
 dependencies {
    testImplementation 'junit:junit:4.13.2'
+   // Test: SQLite for in-memory integration tests
+   testImplementation 'org.xerial:sqlite-jdbc:3.42.0.0'
+   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+   testImplementation 'org.springframework.security:spring-security-test'
+
    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.18'
    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.18'
    implementation 'com.mysql:mysql-connector-j:8.3.0'
@@ -24,4 +29,12 @@ dependencies {
 }
 springBoot {
    mainClass = 'com.example.Example'
+}
+
+test {
+   useJUnitPlatform()
+   testLogging {
+      events "passed", "failed", "skipped"
+      showStandardStreams = true
+   }
 }
