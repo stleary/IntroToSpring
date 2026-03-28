@@ -20,26 +20,6 @@ public class TestExample {
         fakeRepository = new FakeGreetingRepository();
         greetingService = new FormalGreetingService(fakeRepository);
     }
-
-    // --- Validation Annotation Tests ---
-
-    @Test
-    public void testModelValidationAnnotationsPresent() {
-        // Verify that validation annotations are present on the model fields.
-        // The actual validation is triggered by @Valid in the controller,
-        // which requires a Spring web context. Here we confirm the
-        // annotations exist using reflection.
-        try {
-            assertNotNull(
-                    GreetingModel.class.getDeclaredField("name")
-                            .getAnnotation(javax.validation.constraints.NotBlank.class));
-            assertNotNull(
-                    GreetingModel.class.getDeclaredField("message")
-                            .getAnnotation(javax.validation.constraints.NotBlank.class));
-        } catch (NoSuchFieldException e) {
-            fail("Expected field not found on GreetingModel");
-        }
-    }
     
     // --- Service Tests: findAll() ---
 

@@ -13,6 +13,11 @@ public class GreetingModel {
 
     public GreetingModel() {}
 
+    public GreetingModel(Long id, String name, String message) {
+        this.name = name;
+        this.message = message;
+    }
+
     public GreetingModel(Long id, String name, String message,
                     LocalDateTime createdAt) {
 
