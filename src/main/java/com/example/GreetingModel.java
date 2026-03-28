@@ -19,6 +19,11 @@ public class GreetingModel {
         this.createdAt = createdAt;
     }
 
+    public GreetingModel(String name, String message) {
+        this.name = name;
+        this.message = message;
+    }
+
     // Getters and setters
 
     public Long getId() { return id; }
