@@ -1,6 +1,8 @@
 plugins {
    id 'java'
    id 'com.github.johnrengelman.shadow' version '7.1.2'
+   id 'org.springframework.boot' version '2.7.18'
+   id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.example'
@@ -34,7 +36,17 @@ dependencies {
 
    // JSON processing for API Gateway request/response
    implementation 'com.google.code.gson:gson:2.10.1'
+
+   implementation 'org.springframework.boot:spring-boot-starter-web:2.7.18'
+   implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.18'
+   implementation 'org.springframework.boot:spring-boot-starter-security:2.7.18'
+   implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:2.7.18'
+
    testImplementation 'junit:junit:4.13.2'
+   // Test: SQLite for in-memory integration tests
+   testImplementation 'org.xerial:sqlite-jdbc:3.42.0.0'
+   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+   testImplementation 'org.springframework.security:spring-security-test'
 }
 
 shadowJar {
@@ -45,3 +57,11 @@ shadowJar {
 }
 
 build.dependsOn shadowJar
+
+test {
+   useJUnitPlatform()
+   testLogging {
+      events "passed", "failed", "skipped"
+      showStandardStreams = true
+   }
+}

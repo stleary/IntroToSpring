@@ -13,7 +13,7 @@ public class GreetingModel {
 
     public GreetingModel() {}
 
-    public GreetingModel(Long id, String name, String message) {
+    public GreetingModel(String name, String message) {
         this.name = name;
         this.message = message;
     }
