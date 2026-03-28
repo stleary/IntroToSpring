@@ -6,8 +6,6 @@
 .settings/
 bin
 
-src/main/resources/keystore.p12
-
 
 # Compiled class file
 *.class
@@ -29,6 +27,8 @@ src/main/resources/keystore.p12
 *.zip
 *.tar.gz
 *.rar
+
+!gradle/wrapper/gradle-wrapper.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
